@@ -25,10 +25,13 @@ public class BeerOrderLineDecorator implements BeerOrderLineMapper {
     public BeerOrderLineDto beerOrderLineToDto(BeerOrderLine line) {
         var dto = delegate.beerOrderLineToDto(line);
 
-        var beer = beerService.getBeer(line.getBeerId());
+        var beer = beerService.getBeerByUpc(line.getUpc());
 
-        dto.setBeerName(beer.getBeerName());
-        dto.setBeerStyle(beer.getBeerStyle());
+        beer.ifPresent(b -> {
+            dto.setBeerName(b.getBeerName());
+            dto.setBeerStyle(b.getBeerStyle());
+            dto.setPrice(b.getPrice());
+        });
 
         return dto;
     }

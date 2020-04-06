@@ -12,7 +12,6 @@ import java.net.URI;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
@@ -48,12 +47,21 @@ class BeerServiceImplTest {
     }
 
     @Test
-    void getBeer() {
+    void getBeerById() {
         given(restTemplate.getForObject(any(URI.class), eq(BeerDto.class))).willReturn(dto);
 
-        var actual = service.getBeer(id);
+        var actual = service.getBeerById(id).get();
 
-        assertNotNull(actual);
+        assertEquals(dto, actual);
+        verify(restTemplate, times(1)).getForObject(any(URI.class), eq(BeerDto.class));
+    }
+
+    @Test
+    void getBeerByUpc() {
+        given(restTemplate.getForObject(any(URI.class), eq(BeerDto.class))).willReturn(dto);
+
+        var actual = service.getBeerByUpc("0664554136").get();
+
         assertEquals(dto, actual);
         verify(restTemplate, times(1)).getForObject(any(URI.class), eq(BeerDto.class));
     }

@@ -7,12 +7,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
 public class BeerServiceImpl implements BeerService {
 
     private static final String BEER_API_PATH = "/api/v1/beer/{beerId}";
+    private static final String BEER_UPC_API_PATH = "/api/v1/beer/upc/{upc}";
 
     private final RestTemplate restTemplate;
     private final String beerApiAddress;
@@ -24,8 +27,18 @@ public class BeerServiceImpl implements BeerService {
     }
 
     @Override
-    public BeerDto getBeer(UUID beerId) {
+    public Optional<BeerDto> getBeerById(UUID beerId) {
         var uri = UriComponentsBuilder.fromUriString(beerApiAddress + BEER_API_PATH).build(beerId);
-        return restTemplate.getForObject(uri, BeerDto.class);
+        return callApi(uri);
+    }
+
+    @Override
+    public Optional<BeerDto> getBeerByUpc(String upc) {
+        var uri = UriComponentsBuilder.fromUriString(beerApiAddress + BEER_UPC_API_PATH).build(upc);
+        return callApi(uri);
+    }
+
+    private Optional<BeerDto> callApi(URI uri) {
+        return Optional.ofNullable(restTemplate.getForObject(uri, BeerDto.class));
     }
 }

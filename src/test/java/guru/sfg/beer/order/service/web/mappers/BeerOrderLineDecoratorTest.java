@@ -12,6 +12,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 
+import java.math.BigDecimal;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -48,10 +50,12 @@ class BeerOrderLineDecoratorTest {
 
         BeerDto beer = BeerDto.builder()
                 .id(beerId)
+                .upc("13412341234")
                 .beerName("Testy McTest")
                 .beerStyle("ALE")
+                .price(new BigDecimal("10.95"))
                 .build();
-        given(beerService.getBeer(any())).willReturn(beer);
+        given(beerService.getBeerByUpc(any())).willReturn(Optional.of(beer));
 
         var actual = decorator.beerOrderLineToDto(line);
 
@@ -63,7 +67,7 @@ class BeerOrderLineDecoratorTest {
         assertEquals(beer.getBeerStyle(), actual.getBeerStyle());
 
         verify(beerOrderLineMapper, times(1)).beerOrderLineToDto(any());
-        verify(beerService, times(1)).getBeer(any());
+        verify(beerService, times(1)).getBeerByUpc(any());
     }
 
     @Test
@@ -71,6 +75,6 @@ class BeerOrderLineDecoratorTest {
         decorator.dtoToBeerOrderLine(mock(BeerOrderLineDto.class));
 
         verify(beerOrderLineMapper, times(1)).dtoToBeerOrderLine(any());
-        verify(beerService, times(0)).getBeer(any());
+        verify(beerService, times(0)).getBeerById(any());
     }
 }
