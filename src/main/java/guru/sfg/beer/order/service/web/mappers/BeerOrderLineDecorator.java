@@ -28,6 +28,7 @@ public class BeerOrderLineDecorator implements BeerOrderLineMapper {
         var beer = beerService.getBeerByUpc(line.getUpc());
 
         beer.ifPresent(b -> {
+            dto.setBeerId(b.getId());
             dto.setBeerName(b.getBeerName());
             dto.setBeerStyle(b.getBeerStyle());
             dto.setPrice(b.getPrice());

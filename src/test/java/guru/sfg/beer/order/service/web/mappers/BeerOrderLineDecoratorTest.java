@@ -45,7 +45,6 @@ class BeerOrderLineDecoratorTest {
         UUID beerId = UUID.randomUUID();
         BeerOrderLine line = BeerOrderLine.builder()
                 .id(UUID.randomUUID())
-                .beerId(beerId)
                 .build();
 
         BeerDto beer = BeerDto.builder()
@@ -61,7 +60,6 @@ class BeerOrderLineDecoratorTest {
 
         assertNotNull(actual);
         assertEquals(line.getId(), actual.getId());
-        assertEquals(line.getBeerId(), actual.getBeerId());
         assertEquals(beer.getId(), actual.getBeerId());
         assertEquals(beer.getBeerName(), actual.getBeerName());
         assertEquals(beer.getBeerStyle(), actual.getBeerStyle());
