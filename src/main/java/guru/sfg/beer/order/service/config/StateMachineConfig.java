@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.statemachine.config.StateMachineConfigurerAdapter;
 import org.springframework.statemachine.config.builders.StateMachineStateConfigurer;
+import org.springframework.statemachine.config.builders.StateMachineTransitionConfigurer;
 
 import java.util.EnumSet;
 
@@ -23,5 +24,26 @@ public class StateMachineConfig extends StateMachineConfigurerAdapter<BeerOrderS
                 .end(BeerOrderStatus.DELIVERY_EXCEPTION)
                 .end(BeerOrderStatus.ALLOCATION_EXCEPTION)
                 .end(BeerOrderStatus.VALIDATION_EXCEPTION);
+    }
+
+    @Override
+    public void configure(StateMachineTransitionConfigurer<BeerOrderStatus, BeerOrderEvent> transitions) throws Exception {
+        //@formatter:off
+        transitions
+                .withExternal()
+                    .source(BeerOrderStatus.NEW)
+                    .target(BeerOrderStatus.NEW)
+                    .event(BeerOrderEvent.VALIDATE_ORDER)
+                .and()
+                .withExternal()
+                    .source(BeerOrderStatus.NEW)
+                    .target(BeerOrderStatus.VALIDATED)
+                    .event(BeerOrderEvent.VALIDATION_SUCCESS)
+                .and()
+                .withExternal()
+                    .source(BeerOrderStatus.NEW)
+                    .target(BeerOrderStatus.VALIDATION_EXCEPTION)
+                    .event(BeerOrderEvent.VALIDATION_FAILED);
+        //@formatter:on
     }
 }
