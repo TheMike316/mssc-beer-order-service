@@ -61,7 +61,6 @@ public class BeerOrder extends BaseEntity {
     @Fetch(FetchMode.JOIN)
     private Set<BeerOrderLine> beerOrderLines;
 
-    @Builder.Default
     private BeerOrderStatus orderStatus = BeerOrderStatus.NEW;
     private String orderStatusCallbackUrl;
 }
