@@ -13,4 +13,16 @@
     <name>mssc-beer-order-service</name>
     <description>MSSC Beer Order Service</description>
 
+    <properties>
+        <stateMachineVersion>2.2.0.RELEASE</stateMachineVersion>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.statemachine</groupId>
+            <artifactId>spring-statemachine-core</artifactId>
+            <version>${stateMachineVersion}</version>
+        </dependency>
+    </dependencies>
+
 </project>
