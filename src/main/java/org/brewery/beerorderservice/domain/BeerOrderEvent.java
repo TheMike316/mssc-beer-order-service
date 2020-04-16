@@ -1,0 +1,7 @@
+package org.brewery.beerorderservice.domain;
+
+public enum BeerOrderEvent {
+    VALIDATE_ORDER, VALIDATION_SUCCESS, VALIDATION_FAILED,
+    ALLOCATION_SUCCESS, ALLOCATION_NO_INVENTORY, ALLOCATION_FAILED,
+    ORDER_PICKED_UP
+}
