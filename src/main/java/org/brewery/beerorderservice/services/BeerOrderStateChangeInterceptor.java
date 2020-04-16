@@ -23,7 +23,7 @@ public class BeerOrderStateChangeInterceptor extends StateMachineInterceptorAdap
     @Override
     public void preStateChange(State<BeerOrderStatus, BeerOrderEvent> state, Message<BeerOrderEvent> message, Transition<BeerOrderStatus, BeerOrderEvent> transition, StateMachine<BeerOrderStatus, BeerOrderEvent> stateMachine) {
         if (message != null) {
-            Optional.ofNullable((String) message.getHeaders().get("beer-order-id"))
+            Optional.ofNullable((String) message.getHeaders().get(BeerOrderManagerService.BEER_ORDER_ID_HEADER))
                     .map(UUID::fromString)
                     .ifPresent(beerOrderId -> {
                         var beerOrder = repository.getOne(beerOrderId);

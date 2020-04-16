@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class BeerOrderManagerServiceImpl implements BeerOrderManagerService {
 
+
     private final StateMachineFactory<BeerOrderStatus, BeerOrderEvent> stateMachineFactory;
     private final BeerOrderRepository repository;
     private final BeerOrderStateChangeInterceptor interceptor;
@@ -36,7 +37,9 @@ public class BeerOrderManagerServiceImpl implements BeerOrderManagerService {
     private void sendBeerOrderEvent(BeerOrder beerOrder, BeerOrderEvent event) {
         var stateMachine = buildStateMachine(beerOrder);
 
-        var message = MessageBuilder.withPayload(event).build();
+        var message = MessageBuilder.withPayload(event)
+                .setHeader(BEER_ORDER_ID_HEADER, beerOrder.getId())
+                .build();
 
         stateMachine.sendEvent(message);
     }
