@@ -38,7 +38,7 @@ public class BeerOrderManagerServiceImpl implements BeerOrderManagerService {
         var stateMachine = buildStateMachine(beerOrder);
 
         var message = MessageBuilder.withPayload(event)
-                .setHeader(BEER_ORDER_ID_HEADER, beerOrder.getId())
+                .setHeader(BEER_ORDER_ID_HEADER, beerOrder.getId().toString())
                 .build();
 
         stateMachine.sendEvent(message);
