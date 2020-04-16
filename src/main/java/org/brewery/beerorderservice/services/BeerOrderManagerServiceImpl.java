@@ -18,6 +18,7 @@ public class BeerOrderManagerServiceImpl implements BeerOrderManagerService {
 
     private final StateMachineFactory<BeerOrderStatus, BeerOrderEvent> stateMachineFactory;
     private final BeerOrderRepository repository;
+    private final BeerOrderStateChangeInterceptor interceptor;
 
     @Override
     @Transactional
@@ -46,8 +47,10 @@ public class BeerOrderManagerServiceImpl implements BeerOrderManagerService {
         stateMachine.stop();
 
         stateMachine.getStateMachineAccessor()
-                .doWithAllRegions(access ->
-                        access.resetStateMachine(new DefaultStateMachineContext<>(beerOrder.getOrderStatus(), null, null, null)));
+                .doWithAllRegions(access -> {
+                    access.addStateMachineInterceptor(interceptor);
+                    access.resetStateMachine(new DefaultStateMachineContext<>(beerOrder.getOrderStatus(), null, null, null));
+                });
 
         stateMachine.start();
 
