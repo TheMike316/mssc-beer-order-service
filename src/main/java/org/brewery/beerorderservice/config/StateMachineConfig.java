@@ -32,7 +32,7 @@ public class StateMachineConfig extends StateMachineConfigurerAdapter<BeerOrderS
         transitions
                 .withExternal()
                     .source(BeerOrderStatus.NEW)
-                    .target(BeerOrderStatus.NEW)
+                    .target(BeerOrderStatus.VALIDATION_PENDING)
                     .event(BeerOrderEvent.VALIDATE_ORDER)
                 .and()
                 .withExternal()
