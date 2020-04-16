@@ -27,7 +27,9 @@ public class BeerOrderManagerServiceImpl implements BeerOrderManagerService {
 
         var savedOrder = repository.save(beerOrder);
 
-        return null;
+        sendBeerOrderEvent(savedOrder, BeerOrderEvent.VALIDATE_ORDER);
+
+        return savedOrder;
     }
 
     private void sendBeerOrderEvent(BeerOrder beerOrder, BeerOrderEvent event) {
