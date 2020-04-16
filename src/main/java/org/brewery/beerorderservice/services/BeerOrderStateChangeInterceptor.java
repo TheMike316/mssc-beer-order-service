@@ -28,7 +28,7 @@ public class BeerOrderStateChangeInterceptor extends StateMachineInterceptorAdap
                     .ifPresent(beerOrderId -> {
                         var beerOrder = repository.getOne(beerOrderId);
                         beerOrder.setOrderStatus(state.getId());
-                        repository.save(beerOrder);
+                        repository.saveAndFlush(beerOrder);
                     });
         }
     }
