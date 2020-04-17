@@ -37,8 +37,7 @@ public class BeerOrderManagerServiceImpl implements BeerOrderManagerService {
     }
 
     @Override
-    @Transactional
-    public void sendValidationResponseEvent(UUID beerOrderId, boolean valid) {
+    public void processValidationResponse(UUID beerOrderId, boolean valid) {
         var order = repository.getOne(beerOrderId);
 
         var event = valid ? BeerOrderEvent.VALIDATION_SUCCESS : BeerOrderEvent.VALIDATION_FAILED;

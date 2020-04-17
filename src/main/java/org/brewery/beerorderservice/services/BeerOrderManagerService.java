@@ -10,6 +10,6 @@ public interface BeerOrderManagerService {
 
     BeerOrder newBeerOrder(BeerOrder beerOrder);
 
-    void sendValidationResponseEvent(UUID beerOrderId, boolean valid);
+    void processValidationResponse(UUID beerOrderId, boolean valid);
 
 }
