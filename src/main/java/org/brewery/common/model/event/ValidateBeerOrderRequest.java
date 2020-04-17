@@ -12,5 +12,5 @@ import org.brewery.common.model.BeerOrderDto;
 @AllArgsConstructor
 public class ValidateBeerOrderRequest {
 
-    private BeerOrderDto beerDto;
+    private BeerOrderDto beerOrderDto;
 }
