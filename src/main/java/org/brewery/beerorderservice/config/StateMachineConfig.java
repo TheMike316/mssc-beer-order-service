@@ -1,6 +1,7 @@
 package org.brewery.beerorderservice.config;
 
 import lombok.RequiredArgsConstructor;
+import org.brewery.beerorderservice.action.ValidateOrderAction;
 import org.brewery.beerorderservice.domain.BeerOrderEvent;
 import org.brewery.beerorderservice.domain.BeerOrderStatus;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +14,8 @@ import java.util.EnumSet;
 @Configuration
 @RequiredArgsConstructor
 public class StateMachineConfig extends StateMachineConfigurerAdapter<BeerOrderStatus, BeerOrderEvent> {
+
+    private final ValidateOrderAction validateOrderAction;
 
     @Override
     public void configure(StateMachineStateConfigurer<BeerOrderStatus, BeerOrderEvent> states) throws Exception {
@@ -34,6 +37,7 @@ public class StateMachineConfig extends StateMachineConfigurerAdapter<BeerOrderS
                     .source(BeerOrderStatus.NEW)
                     .target(BeerOrderStatus.VALIDATION_PENDING)
                     .event(BeerOrderEvent.VALIDATE_ORDER)
+                    .action(validateOrderAction)
                 .and()
                 .withExternal()
                     .source(BeerOrderStatus.NEW)
