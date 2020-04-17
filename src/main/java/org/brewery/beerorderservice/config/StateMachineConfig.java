@@ -6,6 +6,7 @@ import org.brewery.beerorderservice.action.ValidateOrderAction;
 import org.brewery.beerorderservice.domain.BeerOrderEvent;
 import org.brewery.beerorderservice.domain.BeerOrderStatus;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.statemachine.config.EnableStateMachineFactory;
 import org.springframework.statemachine.config.StateMachineConfigurerAdapter;
 import org.springframework.statemachine.config.builders.StateMachineStateConfigurer;
 import org.springframework.statemachine.config.builders.StateMachineTransitionConfigurer;
@@ -14,6 +15,7 @@ import java.util.EnumSet;
 
 @Configuration
 @RequiredArgsConstructor
+@EnableStateMachineFactory
 public class StateMachineConfig extends StateMachineConfigurerAdapter<BeerOrderStatus, BeerOrderEvent> {
 
     private final ValidateOrderAction validateOrderAction;
