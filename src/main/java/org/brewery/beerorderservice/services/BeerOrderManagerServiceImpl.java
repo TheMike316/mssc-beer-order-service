@@ -63,13 +63,11 @@ public class BeerOrderManagerServiceImpl implements BeerOrderManagerService {
         }
 
         //persist order details
-        order.getBeerOrderLines().forEach(line -> {
-            var lineDto = dto.getBeerOrderLines().stream().filter(l -> line.getId().equals(l.getId())).findFirst();
-            lineDto.ifPresent(ld -> {
-                line.setOrderQuantity(ld.getOrderQuantity());
-                line.setQuantityAllocated(ld.getAllocatedQuantity());
-            });
-        });
+        order.getBeerOrderLines().forEach(line ->
+                dto.getBeerOrderLines().stream()
+                        .filter(l -> line.getId().equals(l.getId()))
+                        .findFirst()
+                        .ifPresent(ld -> line.setQuantityAllocated(ld.getAllocatedQuantity())));
 
         repository.save(order);
 
