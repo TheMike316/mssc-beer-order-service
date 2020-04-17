@@ -40,9 +40,15 @@ public class BeerOrderManagerServiceImpl implements BeerOrderManagerService {
     public void processValidationResponse(UUID beerOrderId, boolean valid) {
         var order = repository.getOne(beerOrderId);
 
-        var event = valid ? BeerOrderEvent.VALIDATION_SUCCESS : BeerOrderEvent.VALIDATION_FAILED;
-
-        sendBeerOrderEvent(order, event);
+        if (valid) {
+            sendBeerOrderEvent(order, BeerOrderEvent.VALIDATION_SUCCESS);
+            // also send allocate order event; validated order needs to be re-fetched,
+            // because the interceptor persists the state
+            var validatedOrder = repository.getOne(beerOrderId);
+            sendBeerOrderEvent(validatedOrder, BeerOrderEvent.ALLOCATE_ORDER);
+        } else {
+            sendBeerOrderEvent(order, BeerOrderEvent.VALIDATION_FAILED);
+        }
     }
 
     private void sendBeerOrderEvent(BeerOrder beerOrder, BeerOrderEvent event) {
