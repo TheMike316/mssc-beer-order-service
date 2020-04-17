@@ -33,7 +33,8 @@ public class BeerOrderLineDto extends BaseItem {
 
     @Builder
     public BeerOrderLineDto(UUID id, Integer version, OffsetDateTime createdDate, OffsetDateTime lastModifiedDate,
-                            String upc, String beerName, String beerStyle, BigDecimal price, UUID beerId, Integer orderQuantity) {
+                            String upc, String beerName, String beerStyle, BigDecimal price, UUID beerId, Integer orderQuantity,
+                            Integer allocatedQuantity) {
         super(id, version, createdDate, lastModifiedDate);
         this.upc = upc;
         this.beerName = beerName;
@@ -41,6 +42,7 @@ public class BeerOrderLineDto extends BaseItem {
         this.price = price;
         this.beerId = beerId;
         this.orderQuantity = orderQuantity;
+        this.allocatedQuantity = allocatedQuantity;
     }
 
     private String upc;
@@ -49,4 +51,5 @@ public class BeerOrderLineDto extends BaseItem {
     private BigDecimal price;
     private UUID beerId;
     private Integer orderQuantity = 0;
+    private Integer allocatedQuantity = 0;
 }

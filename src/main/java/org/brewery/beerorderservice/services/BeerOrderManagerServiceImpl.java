@@ -5,6 +5,7 @@ import org.brewery.beerorderservice.domain.BeerOrder;
 import org.brewery.beerorderservice.domain.BeerOrderEvent;
 import org.brewery.beerorderservice.domain.BeerOrderStatus;
 import org.brewery.beerorderservice.repositories.BeerOrderRepository;
+import org.brewery.common.model.BeerOrderDto;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.config.StateMachineFactory;
@@ -49,6 +50,31 @@ public class BeerOrderManagerServiceImpl implements BeerOrderManagerService {
         } else {
             sendBeerOrderEvent(order, BeerOrderEvent.VALIDATION_FAILED);
         }
+    }
+
+    @Override
+    @Transactional
+    public void processAllocationResponse(BeerOrderDto dto, boolean pendingInventory, boolean allocationError) {
+        BeerOrder order = repository.getOne(dto.getId());
+
+        if (allocationError) {
+            sendBeerOrderEvent(order, BeerOrderEvent.ALLOCATION_FAILED);
+            return;
+        }
+
+        //persist order details
+        order.getBeerOrderLines().forEach(line -> {
+            var lineDto = dto.getBeerOrderLines().stream().filter(l -> line.getId().equals(l.getId())).findFirst();
+            lineDto.ifPresent(ld -> {
+                line.setOrderQuantity(ld.getOrderQuantity());
+                line.setQuantityAllocated(ld.getAllocatedQuantity());
+            });
+        });
+
+        repository.save(order);
+
+        sendBeerOrderEvent(order, pendingInventory ? BeerOrderEvent.ALLOCATION_NO_INVENTORY :
+                BeerOrderEvent.ALLOCATION_SUCCESS);
     }
 
     private void sendBeerOrderEvent(BeerOrder beerOrder, BeerOrderEvent event) {
